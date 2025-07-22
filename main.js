@@ -3,8 +3,33 @@ const cardsEl = document.getElementById('cards');
 const updatedEl = document.getElementById('updated');
 
 async function load() {
-  console.log('>> load() fired');
+  console.log('>> load() fired'); //test 1
   cardsEl.innerHTML = `<div class="loading">Loading...</div>`;
+
+  try { // test 2
+    // 1) fetch your players list
+    console.log(">> fetching players.json from", "players.json");
+    const pResp = await fetch("players.json");
+    console.log("   players.json status", pResp.status);
+    if (!pResp.ok) throw new Error(`players.json → ${pResp.status}`);
+    const players = await pResp.json();
+    console.log("   players loaded:", players);
+
+    // 2) fetch the rank data
+    console.log(">> fetching ranks from", API_URL);
+    const rResp = await fetch(API_URL);
+    console.log("   fetch-ranks status", rResp.status);
+    if (!rResp.ok) throw new Error(`fetch-ranks → ${rResp.status}`);
+    const data = await rResp.json();
+    console.log("   rank data:", data);
+
+    // …then your existing loop to render cards…
+  } catch (err) {
+    console.error("❌ load error:", err);
+    cardsEl.innerHTML = `<div class="error">Error: ${err.message}</div>`;
+  }
+  // end of test 2
+  
   try {
     const players = await (await fetch('players.json', {cache:'no-store'})).json();
     const res = await fetch(window.API_URL + '?t=' + Date.now(), {cache:'no-store'});
