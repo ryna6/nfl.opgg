@@ -9,7 +9,7 @@ async function load() {
     const res = await fetch(window.API_URL + '?t=' + Date.now(), {cache:'no-store'});
     const data = await res.json();
 
-    const merged = players.map(p => ({ ...p, ...(data[p.riotName + '#' + p.tag] || {}) })).sort(sortPlayers);
+    const merged = players.map(p => ({ ...p, ...(data[p.riotName + '-' + p.tag] || {}) })).sort(sortPlayers);
     cardsEl.innerHTML = merged.map((p,i)=> cardHTML(p,i+1)).join('');
 
     const now = new Date();
@@ -29,7 +29,7 @@ function cardHTML(p, rank){
   const total = (p.wins||0) + (p.losses||0);
   const wr = total ? Math.round(p.wins*100/total) : 0;
   const icon = tierIcon(p.tier||'UNRANKED');
-  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '#' + p.tag)}`;
+  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
   return `
   <article class="card">
     <span class="rank-badge">#${rank}</span>
