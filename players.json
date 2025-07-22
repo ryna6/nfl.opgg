@@ -1,0 +1,11 @@
+[
+  { "displayName": "Fizzy",   "riotName": "iFizzySoda",       "tag": "fizzy",  "role": "Mid",        "region": "na1" },
+  { "displayName": "Poker",   "riotName": "PokerKang",        "tag": "na1",    "role": "Jungle",     "region": "na1" },
+  { "displayName": "Sharp",   "riotName": "SharpBit",         "tag": "sharp",  "role": "Mid/ADC",    "region": "na1" },
+  { "displayName": "Tim",     "riotName": "IncredibleBear",   "tag": "uwu",    "role": "Top",        "region": "na1" },
+  { "displayName": "Roy",     "riotName": "RoyUnconquerable", "tag": "1133",   "role": "Jungle/Top", "region": "na1" },
+  { "displayName": "Jeffrey", "riotName": "Jfry",             "tag": "grrrr",  "role": "Jungle",     "region": "na1" },
+  { "displayName": "Sophia",  "riotName": "Tangerineq",       "tag": "fruit",  "role": "Support",    "region": "na1" },
+  { "displayName": "Katie",   "riotName": "KatFishy",         "tag": "kat",    "role": "Support",    "region": "na1" },
+  { "displayName": "Ryan",    "riotName": "ryna629",          "tag": "na1",    "role": "Jungle",     "region": "na1" }
+]
