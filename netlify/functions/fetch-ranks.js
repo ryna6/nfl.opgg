@@ -43,7 +43,7 @@ exports.handler = async () => {
 };
 
 async function riot(url){
-  const res = await fetch(url, { headers: { "X-Riot-Token": RIOT_KEY }});
+  const res = await fetch(url, { headers: { "X-Riot-Token": process.env.RIOT_API_KEY }});
   if (!res.ok) throw new Error(`Riot API ${res.status}: ${await res.text()}`);
   return res.json();
 }
