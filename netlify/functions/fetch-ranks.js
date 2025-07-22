@@ -1,46 +1,48 @@
 // netlify/functions/fetch-ranks.js
 const fetch = global.fetch;
 
-const RIOT_KEY     = process.env.RIOT_API_KEY;
-const ACCOUNT_HOST = "https://americas.api.riotgames.com";
+const RIOT_KEY      = process.env.RIOT_API_KEY;
+const ACCOUNT_HOST  = "https://americas.api.riotgames.com";
 const PLATFORM_HOST = region => `https://${region}.api.riotgames.com`;
-const CACHE_SECONDS = 300; // 5 min
+const CACHE_SECONDS = 300; // 5 minutes
 
 exports.handler = async () => {
   const players = require("../../players.json");
   const out = {};
 
   for (const p of players) {
-    // build the exact same key your front-end is looking up:
+    // Build the same key your front-end uses:
     const key = `${p.riotName}-${p.tag}`;
 
     try {
-      // 1) get PUUID via gameName+tag
+      // 1) Lookup account by gameName+tag to get puuid
       const account = await riot(
         `${ACCOUNT_HOST}/riot/account/v1/accounts/by-riot-id/` +
         `${encodeURIComponent(p.riotName)}/${encodeURIComponent(p.tag)}`
       );
 
-      // 2) get Summoner object by PUUID
+      // 2) Fetch Summoner object by PUUID
       const summ = await riot(
-        `${PLATFORM_HOST(p.region)}/lol/summoner/v4/summoners/by-puuid/${account.puuid}`
+        `${PLATFORM_HOST(p.region)}/lol/summoner/v4/summoners/by-puuid/` +
+        account.puuid
       );
 
-      // 3) get all league entries for that Summoner ID
+      // 3) Fetch all league entries for that Summoner ID
       const leagues = await riot(
-        `${PLATFORM_HOST(p.region)}/lol/league/v4/entries/by-summoner/${summ.id}`
+        `${PLATFORM_HOST(p.region)}/lol/league/v4/entries/by-summoner/` +
+        summ.id
       );
 
-      // pick out solo/duo, or empty object if never played ranked
+      // 4) Pick out the Solo/Duo entry (or default if unranked)
       const solo = leagues.find(e => e.queueType === "RANKED_SOLO_5x5") || {};
 
-      // destructure with defaults
+      // 5) Destructure with sane defaults
       const {
-        tier          = "UNRANKED",
-        rank          = "",
+        tier           = "UNRANKED",
+        rank           = "",
         leaguePoints: lp   = 0,
-        wins          = 0,
-        losses        = 0
+        wins           = 0,
+        losses         = 0
       } = solo;
 
       out[key] = {
@@ -50,20 +52,20 @@ exports.handler = async () => {
         wins,
         losses,
         profileIconId: summ.profileIconId,
-        role: p.role    // if you need role on front-end
+        role: p.role
       };
 
     } catch (err) {
       console.error(`❌ fetch failed for ${key}:`, err);
       out[key] = {
-        tier: "UNRANKED",
-        rank: "",
-        lp: 0,
-        wins: 0,
-        losses: 0,
+        tier:          "UNRANKED",
+        rank:          "",
+        lp:             0,
+        wins:           0,
+        losses:         0,
         profileIconId: null,
-        role: p.role,
-        error: err.message
+        role:           p.role,
+        error:         err.message
       };
     }
   }
