@@ -3,6 +3,7 @@ const cardsEl = document.getElementById('cards');
 const updatedEl = document.getElementById('updated');
 
 async function load() {
+  console.log('>> load() fired');
   cardsEl.innerHTML = `<div class="loading">Loading...</div>`;
   try {
     const players = await (await fetch('players.json', {cache:'no-store'})).json();
