@@ -18,7 +18,7 @@ exports.handler = async () => {
       const leagues = await riot(`${PLATFORM_HOST(p.region)}/lol/league/v4/entries/by-summoner/${summ.id}`);
       const solo = leagues.find(l => l.queueType === "RANKED_SOLO_5x5") || {};
 
-      out[p.riotName] = {
+      out[`${riotName}#${tag}`] = {
         tier: solo.tier || "UNRANKED",
         rank: solo.rank || "",
         lp: solo.leaguePoints || 0,
@@ -27,7 +27,7 @@ exports.handler = async () => {
         profileIconURL: `https://ddragon.leagueoflegends.com/cdn/latest/img/profileicon/${summ.profileIconId}.png`
       };
     } catch (err) {
-      out[p.riotName] = { error: err.message };
+      out[`${riotName}#${tag}`] = { error: err.message };
     }
   }
 
