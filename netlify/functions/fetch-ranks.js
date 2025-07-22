@@ -19,12 +19,12 @@ exports.handler = async () => {
       const solo = leagues.find(l => l.queueType === "RANKED_SOLO_5x5") || {};
 
       out[p.riotName] = {
-        tier: solo.tier || "UNRANKED",
-        rank: solo.rank || "",
-        lp: solo.leaguePoints || 0,
-        wins: solo.wins || 0,
-        losses: solo.losses || 0,
-        profileIconURL: `https://ddragon.leagueoflegends.com/cdn/latest/img/profileicon/${summ.profileIconId}.png`
+        tier,
+        rank,
+        lp,
+        wins,
+        losses,
+        profileIconId: summ.profileIconId
       };
     } catch (err) {
       out[p.riotName] = { error: err.message };
