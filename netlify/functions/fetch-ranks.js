@@ -4,8 +4,8 @@ const RIOT_KEY = process.env.RIOT_API_KEY;
 const ACCOUNT_HOST = "https://americas.api.riotgames.com";
 const PLATFORM_HOST = region => `https://${region}.api.riotgames.com`;
 
-// CDN cache time (30 min)
-const CACHE_SECONDS = 1800;
+// CDN cache time 5 min)
+const CACHE_SECONDS = 300;
 
 exports.handler = async () => {
   const players = require('../../players.json');
