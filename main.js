@@ -29,6 +29,14 @@ async function load() {
     cardsEl.innerHTML = `<div class="error">Error: ${err.message}</div>`;
   }
   // end of test 2
+
+players.forEach((p, i) => { // test 3
+  const key   = `${p.riotName}-${p.tag}`;
+  console.log('looking for', key, 'in API data →', data[key]);
+  const stats = data[key] || {};
+  // … render using stats.tier, stats.lp, etc.
+});
+  // end of test 3
   
   try {
     const players = await (await fetch('players.json', {cache:'no-store'})).json();
