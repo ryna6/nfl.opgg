@@ -14,15 +14,29 @@ function getRoleIcon(role) {
 }
 
 function cardHTML(p, rank, stats) {
-  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
 
   // test
-  function cardHTML(p, rank, stats) {
   console.log("→ cardHTML for", p.riotName, "role:", p.role);
-  // split into roles (will be an array, even if just one)
-  const roles = (p.role||"").split("/").map(r=>r.trim());
-  console.log("   parsed roles:", roles);
+
+  // only one declaration, renamed to avoid collision
+  const rolesArr = (p.role || "").split("/").map(r => r.trim());
+  console.log("   parsed roles:", rolesArr);
+
+  const roleHtml = rolesArr.map(r => {
+    const icon = getRoleIcon(r);
+    console.log(`   getRoleIcon("${r}") →`, icon);
+    return `
+      <span class="role-item">
+        ${ icon
+           ? `<img src="${icon}" alt="${r}" class="role-icon">`
+           : "" }
+        ${r}
+      </span>
+    `;
+  }).join('<span class="role-separator">/</span>');
   // end of test
+  
+  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
 
   // If multiple roles, split and trim
   const roles = p.role.split("/").map(r => r.trim());
