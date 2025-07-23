@@ -72,10 +72,10 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   padding-top: 2rem;
   font-size: 0.9rem;
   color: #f1f1f1;
-  margin-top: 3rem;
+  margin-top: 4rem;
 }
 #updated {
-  margin-top: 2rem;        /* gap between stats and last-updated */
+  margin-top: 4rem;        /* gap between stats and last-updated */
 }
 .stats .stat {
   display: flex;
