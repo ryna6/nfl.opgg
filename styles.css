@@ -41,19 +41,16 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   color: black;
   font-weight: bold;
 }
-
 .cards > a:nth-child(2) .rank-badge {
   background-color: #C0C0C0; /* Silver for 2nd */
   color: black;
   font-weight: bold;
 }
-
 .cards > a:nth-child(3) .rank-badge {
   background-color: #977547; /* Bronze for 3rd */
   color: white;
   font-weight: bold;
 }
-
 /* Last place */
 .cards > a:last-child .rank-badge::before {
   content: '💩';
@@ -64,4 +61,20 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   font-size: 1.2rem;         /* size of the poop */
   line-height: 1;
   pointer-events: none;      /* so it doesn’t block clicks */
+}
+
+/* stats */
+.stats {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding-top: 2rem;
+  font-size: 0.9rem;
+  color: #f1f1f1;
+}
+.stats .stat {
+  background: #2b2b2b;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
 }
