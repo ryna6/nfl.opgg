@@ -113,7 +113,7 @@ function fallbackIcon(){
       </div>
     `;
 
-  } catch (e) {
+   catch (e) {
     cardsEl.innerHTML = `<div class="error">Failed to load: ${e}</div>`;
   }
 
