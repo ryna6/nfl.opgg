@@ -107,7 +107,7 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
 
 /* per-stat colors */
 .stats .stat-value.avg-rank {
-  color: #FFD700;           /* gold */
+  color: #E0BBE4;           /* pastel purple */
 }
 .stats .stat-value.total-games {
   color: #7FBFFF;           /* light blue */
