@@ -67,6 +67,7 @@ function cardHTML(p, rank){
   const wr = total ? Math.round(p.wins*100/total) : 0;
   const icon = tierIcon(p.tier||'UNRANKED');
   const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
+  const displayRank = (rank === total) ? '💩' : `#${rank}`;
   return `
   <a href="${opgg}" target="_blank" rel="noopener" style="text-decoration: none; color: inherit; background-color: none">
   <article class="card">
