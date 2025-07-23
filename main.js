@@ -67,9 +67,7 @@ function cardHTML(p, rank) {
   const wr = total ? Math.round(p.wins * 100 / total) : 0;
   const icon = tierIcon(p.tier || 'UNRANKED') || fallbackIcon();
 
-  // Build link to player detail page, passing riotName-tag as a query param
-  const playerKey = encodeURIComponent(`${p.riotName}-${p.tag}`);
-  const playerUrl = `player.html?player=${playerKey}`;
+  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
 
   return `
   <a class="card-link" href="${playerUrl}">
