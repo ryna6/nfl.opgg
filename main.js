@@ -38,15 +38,6 @@ function cardHTML(p, rank, stats) {
   
   const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
 
-  // If multiple roles, split and trim
-  const roles = p.role.split("/").map(r => r.trim());
-  const roleHtml = roles.map(r => `
-    <span class="role-item">
-      <img src="${getRoleIcon(r)}" alt="${r}" class="role-icon"/>
-      ${r}
-    </span>
-  `).join('<span class="role-separator">/</span>');
-
   return `
     <article class="card">
       <span class="rank-badge">#${rank}</span>
