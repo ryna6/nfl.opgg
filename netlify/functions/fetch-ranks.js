@@ -13,7 +13,6 @@ exports.handler = async () => {
   for (const p of players) {
     // Build the same key your front-end uses:
     const key = `${p.riotName}-${p.tag}`;
-
     try {
       // 1) Lookup account by gameName+tag to get puuid
       const account = await riot(
@@ -23,20 +22,14 @@ exports.handler = async () => {
 
       // 2) Fetch Summoner object by PUUID
       const summ = await riot(
-        `${PLATFORM_HOST(p.region)}/lol/summoner/v4/summoners/by-puuid/` +
+        `${PLATFORM_HOST(p.region)}/lol/league/v4/entries/by-puuid/` +
         account.puuid
       );
 
-      // 3) Fetch all league entries for that Summoner ID
-      const leagues = await riot(
-        `${PLATFORM_HOST(p.region)}/lol/league/v4/entries/by-summoner/` +
-        summ.id
-      );
+      // 3) Pick out the Solo/Duo entry (or default if unranked)
+      const solo = summ.find(e => e.queueType === "RANKED_SOLO_5x5") || {};
 
-      // 4) Pick out the Solo/Duo entry (or default if unranked)
-      const solo = leagues.find(e => e.queueType === "RANKED_SOLO_5x5") || {};
-
-      // 5) Destructure with sane defaults
+      // 4) Destructure with sane defaults
       const {
         tier           = "UNRANKED",
         rank           = "",
@@ -50,9 +43,7 @@ exports.handler = async () => {
         rank,
         lp,
         wins,
-        losses,
-        profileIconId: summ.profileIconId,
-        role: p.role
+        losses
       };
 
     } catch (err) {
@@ -63,8 +54,6 @@ exports.handler = async () => {
         lp:             0,
         wins:           0,
         losses:         0,
-        profileIconId: null,
-        role:           p.role,
         error:         err.message
       };
     }
@@ -83,7 +72,7 @@ exports.handler = async () => {
 
 async function riot(url) {
   const res = await fetch(url, {
-    headers: { "X-Riot-Token": RIOT_API_KEY }
+    headers: { "X-Riot-Token": RIOT_KEY }
   });
   if (!res.ok) {
     const text = await res.text();

@@ -3,4 +3,4 @@ exports.handler = async () => {
   return { statusCode: 200, body: "warmed" };
 };
 
-exports.config = { schedule: "*/30 * * * *" }; // every 30 minutes
+exports.config = { schedule: "*/5 * * * *" }; // every 5 minutes
