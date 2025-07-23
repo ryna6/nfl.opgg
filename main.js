@@ -1,54 +1,6 @@
-// helper to turn a role string into an icon URL
-function getRoleIcon(role) {
-  const key = (role||"").toLowerCase();
-  if (key.includes("top"))      return "https://i.namu.wiki/i/-b85HC9HE4KxEwsPhhK2BPPH13NHDE0nRWJWuRTVCP9vj-liKYPRwAt8oJM0S_0luEtbMngv2dP5dOdK2SiQAA.svg";
-  if (key.includes("jun"))      return "https://i.namu.wiki/i/s0GFtCsIQWVTHfxQXU4Rd7ic5-mp7fHS9j72OQIuMx24CkRNbfey2NkrBBwbLJ1ebvQ78_qhsC7TP3N7oENZ5Q.svg";
-  if (key.includes("mid"))      return "https://i.namu.wiki/i/nd16RJpRR0Mjs4thhZFV1MBLoC8dLje6JnYsIjWMEzqkyU-AWJiGa-oOs6KZIDo4rBRnkH7WB5TCWE5ow_fzdw.svg";
-  if (key.includes("adc")||key.includes("bot")) return "https://i.namu.wiki/i/1rwqWmPwH6722znbshCRdJhldhZVw-lxjKppOHJebL9B9A0TiJlpik5tzeUYKhROsNB3EW6NcAYI8o84JRFR64g.webp";
-  if (key.includes("sup")||key.includes("support")) return "https://i.namu.wiki/i/bbi_LWEwJn55PI3bOoyjaj95tl7pxCwoEUzp6h73x8z_qPE9omZaoatY4Sib-94LFDp25lCwX0gwXUwyw_Dbgw.svg";
-  return "";
-}
-
 const TIERS = ["IRON","BRONZE","SILVER","GOLD","PLATINUM","EMERALD","DIAMOND","MASTER","GRANDMASTER","CHALLENGER"];
 const cardsEl = document.getElementById('cards');
 const updatedEl = document.getElementById('updated');
-
-function cardHTML(p, rank, stats) {
-  // build OP.GG link (with dash)
-  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
-
-  // parse 1+ roles
-  const rolesArr = (p.role||"").split("/").map(r => r.trim());
-
-  // build HTML for each role (only include <img> if icon found)
-  const roleHtml = rolesArr.map(r => {
-    const icon = getRoleIcon(r);
-    return `
-      <span class="role-item">
-        ${ icon ? `<img src="${icon}" alt="${r}" class="role-icon">` : "" }
-        ${r}
-      </span>
-    `;
-  }).join('<span class="role-separator">/</span>');
-
-  // output the card
-  return `
-    <article class="card">
-      <span class="rank-badge">#${rank}</span>
-      <a href="${opgg}" target="_blank" rel="noopener noreferrer">
-        <img 
-          class="avatar" 
-          src="${stats.profileIconId
-            ? `https://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/img/profileicon/${stats.profileIconId}.png`
-            : fallbackIcon()}"
-          alt="${p.displayName}"
-        />
-      </a>
-      <div class="role">${roleHtml}</div>
-      <!-- …other fields like tier, LP, winrate… -->
-    </article>
-  `;
-}
 
 async function load() {
   console.log('>> load() fired'); //test 1
@@ -93,14 +45,7 @@ async function load() {
     const data = await res.json();
 
     const merged = players.map(p => ({ ...p, ...(data[p.riotName + '-' + p.tag] || {}) })).sort(sortPlayers);
-    cardsEl.innerHTML = players // test
-      .map((p,i) => {
-        const key   = `${p.riotName}-${p.tag}`;
-        const stats = data[key] || {};
-        return cardHTML(p, i+1, stats);
-      })
-    .join("");
-    
+    cardsEl.innerHTML = merged.map((p,i)=> cardHTML(p,i+1)).join('');
 
     const now = new Date();
     updatedEl.textContent = `Last updated: ${now.toLocaleString()} (auto-refreshes every 5 minutes)`;
