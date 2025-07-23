@@ -2,6 +2,49 @@ const TIERS = ["IRON","BRONZE","SILVER","GOLD","PLATINUM","EMERALD","DIAMOND","M
 const cardsEl = document.getElementById('cards');
 const updatedEl = document.getElementById('updated');
 
+// helper to turn a role string into an icon URL
+function getRoleIcon(role) {
+  const icons = {
+    top: "https://i.namu.wiki/i/-b85HC9HE4KxEwsPhhK2BPPH13NHDE0nRWJWuRTVCP9vj-liKYPRwAt8oJM0S_0luEtbMngv2dP5dOdK2SiQAA.svg",
+    jungle:     "https://i.namu.wiki/i/s0GFtCsIQWVTHfxQXU4Rd7ic5-mp7fHS9j72OQIuMx24CkRNbfey2NkrBBwbLJ1ebvQ78_qhsC7TP3N7oENZ5Q.svg",
+    mid:        "https://i.namu.wiki/i/nd16RJpRR0Mjs4thhZFV1MBLoC8dLje6JnYsIjWMEzqkyU-AWJiGa-oOs6KZIDo4rBRnkH7WB5TCWE5ow_fzdw.svg",
+    adc:        "https://i.namu.wiki/i/1rwqWmPwH6722znbshCRdJhldhVw-lxjKppOHJebL9B9A0TiJlpik5tzeUYKhROsNB3EW6NcAYI8o84JRFR64g.webp",
+    sup:        "https://i.namu.wiki/i/bbi_LWEwJn55PI3bOoyjaj95tl7pxCwoEUzp6h73x8z_qPE9omZaoatY4Sib-94LFDp25lCwX0gwXUwyw_Dbgw.svg"
+  };
+  return icons[role.toLowerCase()] || "";
+}
+
+function cardHTML(p, rank, stats) {
+  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
+
+  // If multiple roles, split and trim
+  const roles = p.role.split("/").map(r => r.trim());
+  const roleHtml = roles.map(r => `
+    <span class="role-item">
+      <img src="${getRoleIcon(r)}" alt="${r}" class="role-icon"/>
+      ${r}
+    </span>
+  `).join('<span class="role-separator">/</span>');
+
+  return `
+    <article class="card">
+      <span class="rank-badge">#${rank}</span>
+      <a href="${opgg}" target="_blank" rel="noopener noreferrer">
+        <img 
+          class="avatar" 
+          src="${stats.profileIconId 
+            ? `https://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/img/profileicon/${stats.profileIconId}.png`
+            : fallbackIcon()}" 
+          alt="${p.displayName}"
+        />
+      </a>
+      <div class="role">${roleHtml}</div>
+      <!-- …other fields like tier, lp, winrate, etc.… -->
+    </article>
+  `;
+}
+
+
 async function load() {
   console.log('>> load() fired'); //test 1
   cardsEl.innerHTML = `<div class="loading">Loading...</div>`;
