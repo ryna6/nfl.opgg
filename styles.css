@@ -53,28 +53,14 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   font-weight: bold;
 }
 
-/* Last place: poop shape */
-.cards > a:last-child .rank-badge {
-  background-color: #593001;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  z-index: 1;
-}
-
-/* Two top “lumps” */
-.cards > a:last-child .rank-badge::before,
-.cards > a:last-child .rank-badge::after {
-  content: '';
+/* Last place */
+.cards > a:last-child .rank-badge::before {
+  content: '💩';
   position: absolute;
-  top: -0.75rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  background-color: #593001;
-  border-radius: 50%;
-  z-index: 0;
+  top: -1.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;         /* size of the poop */
+  line-height: 1;
+  pointer-events: none;      /* so it doesn’t block clicks */
 }
-
-/* Position left & right lumps */
-.cards > a:last-child .rank-badge::before { left: 0; }
-.cards > a:last-child .rank-badge::after  { right: 0; }
