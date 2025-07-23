@@ -62,22 +62,27 @@ function sortPlayers(a,b){
   return (b.lp||0) - (a.lp||0);
 }
 
-function cardHTML(p, rank){
-  const total = (p.wins||0) + (p.losses||0);
-  const wr = total ? Math.round(p.wins*100/total) : 0;
-  const icon = tierIcon(p.tier||'UNRANKED');
-  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
+function cardHTML(p, rank) {
+  const total = (p.wins || 0) + (p.losses || 0);
+  const wr = total ? Math.round(p.wins * 100 / total) : 0;
+  const icon = tierIcon(p.tier || 'UNRANKED') || fallbackIcon();
+
+  // Build link to player detail page, passing riotName-tag as a query param
+  const playerKey = encodeURIComponent(`${p.riotName}-${p.tag}`);
+  const playerUrl = `player.html?player=${playerKey}`;
+
   return `
-  <article class="card">
-    <span class="rank-badge">#${rank}</span>
-    <a href="${opgg}" target="_blank" rel="noopener">
-      <img class="avatar" src="${icon || fallbackIcon()}" alt="${p.displayName} OP.GG">
-    </a>
-    <div class="lp">${p.tier || 'UNRANKED'} ${p.rank || ''} - ${p.lp || 0} LP</div>
-    <div class="wl">${p.wins||0}W - ${p.losses||0}L (${wr}%)</div>
-    <h2 class="name">${p.displayName}</h2>
-    <div class="role">${p.role}</div>
-  </article>`;
+  <a class="card-link" href="${playerUrl}">
+    <article class="card">
+      <span class="rank-badge">#${rank}</span>
+      <img class="avatar" src="${icon}" alt="${p.displayName}">
+      <div class="lp">${p.tier || 'UNRANKED'} ${p.rank || ''} - ${p.lp || 0} LP</div>
+      <div class="wl">${p.wins || 0}W - ${p.losses || 0}L (${wr}%)</div>
+      <h2 class="name">${p.displayName}</h2>
+      <div class="role">${p.role}</div>
+    </article>
+  </a>
+  `;
 }
 
 function tierIcon(tier){
