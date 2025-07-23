@@ -48,7 +48,7 @@ async function load() {
     cardsEl.innerHTML = merged.map((p,i)=> cardHTML(p,i+1)).join('');
 
     const now = new Date();
-    updatedEl.textContent = `Last updated: ${now.toLocaleString()} (auto-refreshes every 30 minutes)`;
+    updatedEl.textContent = `Last updated: ${now.toLocaleString()} (auto-refreshes every 5 minutes)`;
   } catch (e) {
     cardsEl.innerHTML = `<div class="error">Failed to load: ${e}</div>`;
   }
@@ -57,6 +57,8 @@ async function load() {
 function sortPlayers(a,b){
   const t = TIERS.indexOf((b.tier||"UNRANKED").toUpperCase()) - TIERS.indexOf((a.tier||"UNRANKED").toUpperCase());
   if (t !== 0) return t;
+  const r = (a.rank||'').localeCompare(b.rank||'');
+  if (r !== 0) return r;
   return (b.lp||0) - (a.lp||0);
 }
 
@@ -69,9 +71,8 @@ function cardHTML(p, rank){
   <article class="card">
     <span class="rank-badge">#${rank}</span>
     <a href="${opgg}" target="_blank" rel="noopener">
-      <img class="avatar" src="${p.profileIconURL || fallbackIcon()}" alt="${p.displayName}">
+      <img class="avatar" src="${icon || fallbackIcon()}" alt="${p.displayName} OP.GG">
     </a>
-    <img class="tier-icon" src="${icon}" alt="${p.tier||'Unranked'}">
     <div class="lp">${p.tier || 'UNRANKED'} ${p.rank || ''} - ${p.lp || 0} LP</div>
     <div class="wl">${p.wins||0}W - ${p.losses||0}L (${wr}%)</div>
     <h2 class="name">${p.displayName}</h2>
@@ -80,14 +81,15 @@ function cardHTML(p, rank){
 }
 
 function tierIcon(tier){
-  const cap = tier[0].toUpperCase()+tier.slice(1).toLowerCase();
-  return `https://raw.githubusercontent.com/pauloluan/riot-api-icons/master/ranked-emblems/Emblem_${cap}.png`;
+  tier = tier.charAt(0).toUpperCase() + tier.slice(1).toLowerCase();
+  return `https://wiki.leagueoflegends.com/en-us/images/Season_2023_-_${tier}.png`;
 }
+
 function fallbackIcon(){
   return "https://ddragon.leagueoflegends.com/cdn/latest/img/profileicon/588.png";
 }
 
 // initial load
 load();
-// auto refresh every 30 min (1800000 ms)
-setInterval(load, 30 * 60 * 1000);
+// auto refresh every 5 min
+setInterval(load, 5 * 60 * 1000);
