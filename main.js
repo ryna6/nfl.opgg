@@ -5,7 +5,7 @@ const updatedEl = document.getElementById('updated');
 async function load() {
   cardsEl.innerHTML = `<div class="loading"> 
   <img
-      src="./fizzy.jpg"
+      src="img/fizzy.jpg"
       alt="Loading…"
       class="loading-img"
     />
