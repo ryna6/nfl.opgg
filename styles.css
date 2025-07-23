@@ -31,27 +31,28 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   margin-bottom: 0.5rem;
 }
 
-/* Emphasized Rank Badge Colors */
-.card:nth-child(1) .rank-badge {
-  background-color: #FFD700; /* Gold */
+/* Emphasized Rank Badge Colors (select via the wrapping <a> tags) */
+.cards > a:nth-child(1) .rank-badge {
+  background-color: #FFD700; /* Gold for 1st */
   color: black;
   font-weight: bold;
 }
 
-.card:nth-child(2) .rank-badge {
-  background-color: #C0C0C0; /* Silver */
+.cards > a:nth-child(2) .rank-badge {
+  background-color: #C0C0C0; /* Silver for 2nd */
   color: black;
   font-weight: bold;
 }
 
-.card:nth-child(3) .rank-badge {
-  background-color: #CD7F32; /* Bronze */
+.cards > a:nth-child(3) .rank-badge {
+  background-color: #CD7F32; /* Bronze for 3rd */
   color: white;
   font-weight: bold;
 }
 
-.card:last-child .rank-badge {
-  background-color: #593001; /* Poop color */
+.cards > a:last-child .rank-badge {
+  background-color: #593001; /* Poop brown for last */
   color: white;
   font-weight: bold;
 }
+
