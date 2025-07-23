@@ -76,8 +76,8 @@ function cardHTML(p, rank){
     <div class="wl">${p.wins||0}W - ${p.losses||0}L (${wr}%)</div>
     <h2 class="name">${p.displayName}</h2>
     <div class="role">${p.role}</div>
-  </article>`;
-  </a>
+  </article>
+  </a>`;
 }
 
 function tierIcon(tier){
