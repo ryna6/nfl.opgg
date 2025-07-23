@@ -52,9 +52,16 @@ async function load() {
       (sum, p) => sum + (p.wins || 0) + (p.losses || 0),
       0
     );
-    const avgRank = (
-      merged.reduce((sum, _, idx) => sum + (idx + 1), 0) / merged.length
-    ).toFixed(2);
+    const numericAvg = merged.reduce((sum, _, idx) => sum + (idx + 1), 0) / merged.length;
+    // convert that to an index in the array (0-based), clamped
+    const avgIndex = Math.min(
+      merged.length - 1,
+      Math.max(0, Math.round(numericAvg) - 1)
+    );
+    // pick the player at that position to get their tier/rank
+    const avgPlayer = merged[avgIndex] || {};
+    const avgRankStr = `${avgPlayer.tier || 'UNRANKED'} ${avgPlayer.rank || ''}`.trim();
+    
     const secsPerGame = 29 * 60 + 21;
     const totalSecs   = totalGames * secsPerGame;
     const hours       = Math.floor(totalSecs / 3600);
