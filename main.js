@@ -68,9 +68,9 @@ function cardHTML(p, rank){
   const icon = tierIcon(p.tier||'UNRANKED');
   const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
   return `
-  <article class="card" href="${opgg}" target="_blank">
+  <article class="card" href="${opgg}" target="_blank" rel="noopener">
     <span class="rank-badge">#${rank}</span>
-    <a rel="noopener">
+    <a>
       <img class="avatar" src="${icon || fallbackIcon()}" alt="${p.displayName} OP.GG">
     </a>
     <div class="lp">${p.tier || 'UNRANKED'} ${p.rank || ''} - ${p.lp || 0} LP</div>
