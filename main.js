@@ -1,7 +1,3 @@
-const TIERS = ["IRON","BRONZE","SILVER","GOLD","PLATINUM","EMERALD","DIAMOND","MASTER","GRANDMASTER","CHALLENGER"];
-const cardsEl = document.getElementById('cards');
-const updatedEl = document.getElementById('updated');
-
 // helper to turn a role string into an icon URL
 function getRoleIcon(role) {
   const key = (role||"").toLowerCase();
@@ -13,49 +9,46 @@ function getRoleIcon(role) {
   return "";
 }
 
+const TIERS = ["IRON","BRONZE","SILVER","GOLD","PLATINUM","EMERALD","DIAMOND","MASTER","GRANDMASTER","CHALLENGER"];
+const cardsEl = document.getElementById('cards');
+const updatedEl = document.getElementById('updated');
+
 function cardHTML(p, rank, stats) {
+  // build OP.GG link (with dash)
+  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
 
-  // test
-  console.log("→ cardHTML for", p.riotName, "role:", p.role);
+  // parse 1+ roles
+  const rolesArr = (p.role||"").split("/").map(r => r.trim());
 
-  // only one declaration, renamed to avoid collision
-  const rolesArr = (p.role || "").split("/").map(r => r.trim());
-  console.log("   parsed roles:", rolesArr);
-
+  // build HTML for each role (only include <img> if icon found)
   const roleHtml = rolesArr.map(r => {
     const icon = getRoleIcon(r);
-    console.log(`   getRoleIcon("${r}") →`, icon);
     return `
       <span class="role-item">
-        ${ icon
-           ? `<img src="${icon}" alt="${r}" class="role-icon">`
-           : "" }
+        ${ icon ? `<img src="${icon}" alt="${r}" class="role-icon">` : "" }
         ${r}
       </span>
     `;
   }).join('<span class="role-separator">/</span>');
-  // end of test
-  
-  const opgg = `https://op.gg/lol/summoners/na/${encodeURIComponent(p.riotName + '-' + p.tag)}`;
 
+  // output the card
   return `
     <article class="card">
       <span class="rank-badge">#${rank}</span>
       <a href="${opgg}" target="_blank" rel="noopener noreferrer">
         <img 
           class="avatar" 
-          src="${stats.profileIconId 
+          src="${stats.profileIconId
             ? `https://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/img/profileicon/${stats.profileIconId}.png`
-            : fallbackIcon()}" 
+            : fallbackIcon()}"
           alt="${p.displayName}"
         />
       </a>
       <div class="role">${roleHtml}</div>
-      <!-- …other fields like tier, lp, winrate, etc.… -->
+      <!-- …other fields like tier, LP, winrate… -->
     </article>
   `;
 }
-
 
 async function load() {
   console.log('>> load() fired'); //test 1
