@@ -43,9 +43,7 @@ exports.handler = async () => {
         rank,
         lp,
         wins,
-        losses,
-        profileIconId: summ.profileIconId,
-        role: p.role
+        losses
       };
 
     } catch (err) {
@@ -56,8 +54,6 @@ exports.handler = async () => {
         lp:             0,
         wins:           0,
         losses:         0,
-        profileIconId: null,
-        role:           p.role,
         error:         err.message
       };
     }
