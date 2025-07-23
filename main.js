@@ -4,12 +4,12 @@ const updatedEl = document.getElementById('updated');
 
 async function load() {
   cardsEl.innerHTML = `<div class="loading"> 
+  Loading...
   <img
       src="img/fizzy.jpg"
       alt="Loading…"
       class="loading-img"
     />
-  Loading...
   </div>`; // fizzy just ranked down !!!
 
   try { // test 2
