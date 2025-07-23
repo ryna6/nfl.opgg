@@ -1,60 +1,44 @@
 // === File: player.js ===
 
 async function loadPlayer() {
-  // … same setup as before …
+  // … your setup code …
 
   // 1) Highest mastery
   try {
     const mRes = await fetch(`/.netlify/functions/fetch-masteries?puuid=${p.puuid}`);
-    const [top] = mRes.ok ? await mRes.json() : [];
+    const mastery = mRes.ok ? (await mRes.json())[0] : null;
     document.getElementById('highest-mastery').textContent =
-      top
-        ? `Highest Mastery: Champion ${top.championId} (${top.championPoints.toLocaleString()} pts)`
+      mastery
+        ? `Highest Mastery: Champion ${mastery.championId} (${mastery.championPoints.toLocaleString()} pts)`
         : 'No mastery data';
-  } catch (e) {
-    console.error(e);
+  } catch {
     document.getElementById('highest-mastery').textContent = 'Error loading mastery';
   }
 
-  // 2) Recent games + timelines
+  // 2) 10 most recent games (IDs only)
   try {
-    // fetch the last 10 match IDs
     const ids = await fetch(`/.netlify/functions/fetch-games?puuid=${p.puuid}&count=10`)
-                   .then(r => r.ok ? r.json() : []);
+                       .then(r => r.ok ? r.json() : []);
     const listEl = document.getElementById('recent-games');
-    if (!ids.length) {
-      listEl.innerHTML = '<li>No games found</li>';
-    } else {
-      // For each ID, fetch its timeline
-      const timelines = await Promise.all(
-        ids.map(id =>
-          fetch(`/.netlify/functions/fetch-timeline?matchId=${id}`)
-            .then(r => (r.ok ? r.json() : null))
-            .catch(() => null)
-        )
-      );
-      listEl.innerHTML = timelines.map((tl, i) => {
-        if (!tl) return `<li>${ids[i]} — no timeline</li>`;
-        // extract whatever you like from the timeline, e.g. game duration
-        const dur = tl.info.gameDuration;
-        return `<li>${ids[i]} — Duration: ${Math.floor(dur/60)}m ${dur%60}s</li>`;
-      }).join('');
-    }
-  } catch (e) {
-    console.error(e);
+    listEl.innerHTML = ids.length
+      ? ids.map(id => `<li>${id}</li>`).join('')
+      : '<li>No games found</li>';
+  } catch {
     document.getElementById('recent-games').innerHTML = '<li>Error loading games</li>';
   }
 
+  // (Optional) If you also want timelines in your UI:
+  //   fetch each timeline via fetch-timeline.js exactly the same way
+
   // 3) Active shards
   try {
-    const s = await fetch(`/.netlify/functions/fetch-shards?puuid=${p.puuid}`)
-                     .then(r => r.ok ? r.json() : {});
+    const shardData = await fetch(`/.netlify/functions/fetch-shards?puuid=${p.puuid}`)
+                             .then(r => r.ok ? r.json() : {});
     document.getElementById('active-shards').textContent =
-      s.activeShard
-        ? `Active Shard: ${s.activeShard}`
+      shardData.activeShard
+        ? `Active Shard: ${shardData.activeShard}`
         : 'No shard info';
-  } catch (e) {
-    console.error(e);
+  } catch {
     document.getElementById('active-shards').textContent = 'Error loading shards';
   }
 }
