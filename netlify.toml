@@ -1,3 +1,6 @@
+[functions]
+  external_node_modules = ["node-fetch"]
+  
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
@@ -6,6 +9,3 @@
 [build]
   publish = "public"            # or your actual publish directory
   functions = "netlify/functions"  # or wherever your .js files actually are
-
-[functions]
-  external_node_modules = ["node-fetch"]
