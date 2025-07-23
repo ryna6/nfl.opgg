@@ -5,8 +5,8 @@ const updatedEl = document.getElementById('updated');
 async function load() {
   cardsEl.innerHTML = `<div class="loading"> 
   <img
-      src="https://media.discordapp.net/attachments/1160467680244006987/1387648277461074012/8F48F253-B949-40FB-B27C-12BE14ECAF1A.jpg"
-      alt="Loading image"
+      src="./fizzy.jpg"
+      alt="Loading…"
       class="loading-img"
     />
   Loading...
