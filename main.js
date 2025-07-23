@@ -60,10 +60,20 @@ async function load() {
     const minutes     = Math.floor((totalSecs % 3600) / 60);
 
     statsEl.innerHTML = `
-      <div class="stat">Avg Rank: ${avgRankStr}</div>
-      <div class="stat">Total Games: ${totalGames}</div>
-      <div class="stat">Hours Not Touched Grass: ${hours}h ${minutes}m</div>
+    <div class="stat">
+      <div class="stat-label">Avg Rank</div>
+      <div class="stat-value avg-rank">${avgRankStr}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Total Games</div>
+      <div class="stat-value total-games">${totalGames}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Hours Not Touched Grass</div>
+      <div class="stat-value hours">${hours}h ${minutes}m</div>
+    </div>
     `;
+    
   } catch (err) {
     console.error('❌ load error:', err);
     cardsEl.innerHTML  = `<div class="error">Error: ${err.message}</div>`;
