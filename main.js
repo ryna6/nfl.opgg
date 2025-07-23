@@ -93,7 +93,14 @@ async function load() {
     const data = await res.json();
 
     const merged = players.map(p => ({ ...p, ...(data[p.riotName + '-' + p.tag] || {}) })).sort(sortPlayers);
-    cardsEl.innerHTML = merged.map((p,i)=> cardHTML(p,i+1)).join('');
+    cardsEl.innerHTML = players // test
+      .map((p,i) => {
+        const key   = `${p.riotName}-${p.tag}`;
+        const stats = data[key] || {};
+        return cardHTML(p, i+1, stats);
+      })
+    .join("");
+    
 
     const now = new Date();
     updatedEl.textContent = `Last updated: ${now.toLocaleString()} (auto-refreshes every 5 minutes)`;
