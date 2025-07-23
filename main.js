@@ -96,6 +96,41 @@ function fallbackIcon(){
   return "https://ddragon.leagueoflegends.com/cdn/latest/img/profileicon/588.png";
 }
 
+async function load() {
+  // … your existing fetch + sort + render cards …
+  const cardsEl = document.getElementById('cards');
+  cardsEl.innerHTML = players
+    .map((p, i) => cardHTML(p, i+1, players.length))
+    .join('');
+
+  // —–– NEW: compute & render stats —––––
+  const statsEl = document.getElementById('stats');
+
+  // total games = sum of wins+losses
+  const totalGames = players.reduce(
+    (sum, p) => sum + (p.wins||0) + (p.losses||0),
+    0
+  );
+
+  // average rank (1 = top, N = bottom)
+  const avgRank = (
+    players.reduce((sum, _, idx) => sum + (idx + 1), 0)
+    / players.length
+  ).toFixed(2);
+
+  // “hours not touched grass”: totalGames × 29min21sec
+  const secsPerGame = 29 * 60 + 21;
+  const totalSecs   = totalGames * secsPerGame;
+  const hours       = Math.floor(totalSecs / 3600);
+  const minutes     = Math.floor((totalSecs % 3600) / 60);
+
+  statsEl.innerHTML = `
+    <div class="stat">Avg Rank: ${avgRank}</div>
+    <div class="stat">Total Games: ${totalGames}</div>
+    <div class="stat">Hours Not Touched Grass: ${hours}h ${minutes}m</div>
+  `;
+}
+      
 // initial load
 load();
 // auto refresh every 5 min
