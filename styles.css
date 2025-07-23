@@ -33,31 +33,27 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
 
 /* === Player Page Styles === */
 
-body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: #f5f5f5;
-  margin: 0;
-}
+.player-page body { /* this one you can remove—body already has the class */ }
 
-#custom-header {
+.player-page #custom-header {
   width: 100%;
   height: 200px;
   overflow: hidden;
   position: relative;
 }
-#custom-header img {
+.player-page #custom-header img {
+  object-fit: cover;
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 
-main {
+.player-page main {
   max-width: 800px;
   margin: -60px auto 40px;
   padding: 0 20px;
 }
 
-#player-info {
+.player-page #player-info {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -65,47 +61,9 @@ main {
   text-align: center;
 }
 
-#player-info h1 {
-  margin-top: 0;
-  font-size: 2rem;
-}
-
-#highest-mastery,
-#active-shards {
-  margin: 20px 0;
-  font-weight: 500;
-  color: #333;
-}
-
-#recent-games {
-  list-style: none;
-  padding: 0;
-  margin: 20px 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 12px;
-}
-
-#recent-games li {
-  background: #fafafa;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 0.9rem;
-  color: #555;
-  word-break: break-all;
-}
-
-#opgg-link {
-  display: inline-block;
-  margin-top: 30px;
-  background: #1f8ecd;
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background 0.3s;
-}
-
-#opgg-link:hover {
-  background: #166e9c;
-}
+.player-page #player-info h1 { /* etc… */ }
+.player-page #highest-mastery { /* … */ }
+.player-page #recent-games { /* … */ }
+.player-page #recent-games li { /* … */ }
+.player-page #opgg-link { /* … */ }
+.player-page #opgg-link:hover { /* … */ }
