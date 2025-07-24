@@ -82,7 +82,7 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   margin-top: 4rem;
 }
 #updated {
-  margin-top: 4rem;        /* gap between stats and last-updated */
+  margin-top: 4rem;
 }
 .stats .stat {
   display: flex;
@@ -123,7 +123,7 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   color: #66CDAA;           /* medium aquamarine */
 }
 
-/* mobile player card */
+/* desktop player card */
 @media (min-width: 1024px) {
   .cards {
     /* lock each column to ~300px and center the grid in its container */
@@ -131,11 +131,20 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
     justify-content: center;
   }
 }
+/* mobile player card */
+@media (max-width: 600px) {
+  .cards {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
 /* mobile fizzy loading image */
 @media (max-width: 600px) {
   .cards .loading img.loading-img {
-    width: 80%;
+    width: 90%;
     max-width: none;
+    margin: 2rem auto 0;
   }
 }
 /* mobile stats card */
