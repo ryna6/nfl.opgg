@@ -142,7 +142,7 @@ function fallbackIcon(){ return "https://ddragon.leagueoflegends.com/cdn/latest/
 let clashMatchDetails = [];
 let clashPageIndex    = 0;
 const clashPageSize   = 10;
-const API_KEY = 'RGAPI-4ec68e9f-3256-48b0-9feb-05feb353c09e';
+const RIOT_KEY = 'RGAPI-4ec68e9f-3256-48b0-9feb-05feb353c09e';
 
 // ─── Riot API helper functions ─────────────────────────────────────────────
 async function getSummonerByName(name, region = 'na1') {
