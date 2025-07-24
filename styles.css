@@ -106,7 +106,7 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
 
 /* main value, large & bold */
 .stats .stat-value {
-  font-size: 1.75rem;
+  font-size: 1.8rem;
   font-weight: bold;
   line-height: 1;
   text-align: center;
@@ -114,6 +114,10 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
 /* decrease font size for avg rank */
 .stats .stat-value.avg-rank {
   font-size: 1.3rem;
+}
+/* decrease font size for hour not touched grass */
+.stats .stat-value.hours {
+  font-size: 1.5rem;
 }
 /* per-stat colors */
 .stats .stat-value.avg-rank {
