@@ -142,32 +142,20 @@ function fallbackIcon(){ return "https://ddragon.leagueoflegends.com/cdn/latest/
 let clashMatchDetails = [];
 let clashPageIndex    = 0;
 const clashPageSize   = 10;
-const RIOT_KEY = 'RGAPI-4ec68e9f-3256-48b0-9feb-05feb353c09e';
 
 // ─── Riot API helper functions ─────────────────────────────────────────────
-async function getSummonerByName(name, region = 'na1') {
-  const res = await fetch(
-    `https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(name)}`,
-    { headers: { 'X-Riot-Token': RIOT_KEY } }
-  );
+async function getSummonerByName(name) {
+  const res = await fetch(`/api/get-summoner?name=${encodeURIComponent(name)}`);
   return res.ok ? res.json() : null;
 }
 
-async function getRecentClashMatchIds(puuid, region = 'americas', max = 15) {
-  const url = new URL(
-    `https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids`
-  );
-  url.searchParams.set('type', 'tourney');
-  url.searchParams.set('count', max);
-  const res = await fetch(url, { headers: { 'X-Riot-Token': RIOT_KEY } });
+async function getRecentClashMatchIds(puuid, _, max = 15) {
+  const res = await fetch(`/api/get-match-ids?puuid=${puuid}&count=${max}`);
   return res.ok ? res.json() : [];
 }
 
-async function getMatchDetail(id, region = 'americas') {
-  const res = await fetch(
-    `https://${region}.api.riotgames.com/lol/match/v5/matches/${id}`,
-    { headers: { 'X-Riot-Token': RIOT_KEY } }
-  );
+async function getMatchDetail(id) {
+  const res = await fetch(`/api/get-match-detail?id=${id}`);
   return res.ok ? res.json() : null;
 }
 
