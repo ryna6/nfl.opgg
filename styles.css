@@ -38,7 +38,7 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   margin-bottom: 0.5rem;
-  marign-left: 5rem;
+  margin-left: 1rem;
   overflow: visible;
 }
 
@@ -123,12 +123,15 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   color: #66CDAA;           /* medium aquamarine */
 }
 
-.cards.stats {
-}
-/* Mobile tweak (still 3 columns, but never narrower than 80px, smaller gaps) */
 @media (max-width: 600px) {
-  .cards {
-    grid-template-columns: repeat(3, minmax(80px, 1fr));
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 0.5rem;
+    padding-top: 1rem;
+  }
+.stats .stat {
+    min-width: 0;
+    width: 100%;
   }
 }
