@@ -95,11 +95,6 @@ try {
       <div class="stat-value hours">${hours}h ${minutes}m</div>
     </div>
     `;
-
-    // test for clash section
-    console.log('▶️ Calling loadOverallClash with', merged.length, 'players');
-    // for clash section
-    await loadOverallClash(merged);
     
   } catch (err) {
     console.error('❌ load error:', err);
@@ -138,121 +133,6 @@ function sortPlayers(a,b) {
 
 function tierIcon(t){ t=t.charAt(0).toUpperCase()+t.slice(1).toLowerCase(); return `https://wiki.leagueoflegends.com/en-us/images/Season_2023_-_${t}.png`; }
 function fallbackIcon(){ return "https://ddragon.leagueoflegends.com/cdn/latest/img/profileicon/588.png"; }
-
-
-// ─── Clash pagination globals ───────────────────────────────────────────────
-let clashMatchDetails = [];
-let clashPageIndex    = 0;
-const clashPageSize   = 10;
-
-// ─── Riot API helper functions ─────────────────────────────────────────────
-async function getSummonerByName(name) {
-  const res = await fetch(
-    `/.netlify/functions/get-summoner?name=${encodeURIComponent(name)}&region=na1`
-  );
-  return res.ok ? res.json() : null;
-}
-async function getRecentClashMatchIds(puuid, _, max = 15) {
-  const res = await fetch(
-    `/.netlify/functions/get-match-ids?puuid=${encodeURIComponent(puuid)}&count=${max}`
-  );
-  return res.ok ? res.json() : [];
-}
-async function getMatchDetail(id) {
-  const res = await fetch(
-    `/.netlify/functions/get-match-detail?id=${encodeURIComponent(id)}`
-  );
-  return res.ok ? res.json() : null;
-}
-
-// ─── Build & render the “Overall Clash” tab ────────────────────────────────
-
-// test
-console.log('loadOverallClash: start');
-
-async function loadOverallClash(mergedPlayers) {
-  const uniqueIds = new Set();
-
-  // Gather up to 50 unique match IDs (max 5 pages)
-  for (const p of mergedPlayers) {
-    if (uniqueIds.size >= clashPageSize * 5) break;
-    const summ = await getSummonerByName(p.riotName);
-    if (!summ?.puuid) continue;
-    const ids = await getRecentClashMatchIds(summ.puuid);
-    for (const id of ids) {
-      uniqueIds.add(id);
-      if (uniqueIds.size >= clashPageSize * 5) break;
-    }
-  }
-  
-  // test
-  console.log('loadOverallClash: uniqueIds count =', uniqueIds.size, Array.from(uniqueIds));
-  
-  // Fetch details & keep only true Clash (tourney) games
-  const details = (await Promise.all(
-    Array.from(uniqueIds).map(id => getMatchDetail(id))
-  )).filter(d => d && d.info?.tournamentCode);
-
-  // test
-  console.log('loadOverallClash: fetched detail count =', details.length, details);
-  
-  // Sort newest→oldest, reset page index, store
-  clashMatchDetails = details.sort(
-    (a, b) => b.info.gameStartTimestamp - a.info.gameStartTimestamp
-  );
-  clashPageIndex = 0;
-
-  renderClashGames();
-}
-
-function renderClashGames() {
-  const container = document.getElementById('clash');
-  const start     = clashPageIndex * clashPageSize;
-  const slice     = clashMatchDetails.slice(start, start + clashPageSize);
-
-  // On first render, build the list + button
-  if (clashPageIndex === 0) {
-    container.innerHTML = `
-      <h3 class="clash-header">Overall Clash — Recent Games</h3>
-      <div id="clash-games" class="clash-list"></div>
-      <button id="clash-load-more" class="btn clash-btn">Show More</button>
-    `;
-    document
-      .getElementById('clash-load-more')
-      .addEventListener('click', () => {
-        clashPageIndex++;
-        renderClashGames();
-      });
-  }
-
-  // Append this page’s games
-  const listEl = document.getElementById('clash-games');
-  listEl.innerHTML += slice
-    .map(d => {
-      const dt    = new Date(d.info.gameStartTimestamp);
-      const time  = dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString();
-      const me    = d.info.participants.find(p => p.puuid === d.metadata.participants.find(x => x));
-      const champs= d.info.participants
-                     .filter(p => p.teamId === me.teamId)
-                     .map(p => p.championName)
-                     .join(', ');
-      const result= me.win ? 'Win' : 'Loss';
-
-      return `
-        <div class="clash-game-card">
-          <div class="cg-date">${time}</div>
-          <div class="cg-champs">${champs}</div>
-          <div class="cg-result ${result.toLowerCase()}">${result}</div>
-        </div>
-      `;
-    })
-    .join('');
-
-  // Hide “Show More” if we’re out of games
-  if ((clashPageIndex + 1) * clashPageSize >= clashMatchDetails.length) {
-    document.getElementById('clash-load-more').style.display = 'none';
-  }
-}
 
 load();
 setInterval(load, 5*60*1000);
