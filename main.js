@@ -147,17 +147,19 @@ const clashPageSize   = 10;
 
 // ─── Riot API helper functions ─────────────────────────────────────────────
 async function getSummonerByName(name) {
-  const res = await fetch(`/api/get-summoner?name=${encodeURIComponent(name)}`);
+  const res = await fetch(`/.netlify/functions/get-summoner?name=${encodeURIComponent(name)}&region=na1`);
   return res.ok ? res.json() : null;
 }
-
 async function getRecentClashMatchIds(puuid, _, max = 15) {
-  const res = await fetch(`/api/get-match-ids?puuid=${puuid}&count=${max}`);
+  const res = await fetch(
+    `/.netlify/functions/get-match-ids?puuid=${encodeURIComponent(puuid)}&count=${max}`
+  );
   return res.ok ? res.json() : [];
 }
-
 async function getMatchDetail(id) {
-  const res = await fetch(`/api/get-match-detail?id=${id}`);
+  const res = await fetch(
+    `/.netlify/functions/get-match-detail?id=${encodeURIComponent(id)}`
+  );
   return res.ok ? res.json() : null;
 }
 
@@ -172,7 +174,7 @@ async function loadOverallClash(mergedPlayers) {
   // Gather up to 50 unique match IDs (max 5 pages)
   for (const p of mergedPlayers) {
     if (uniqueIds.size >= clashPageSize * 5) break;
-    const summ = await getSummonerByName(`${p.riotName}-${p.tag}`);
+    const summ = await getSummonerByName(p.riotName);
     if (!summ?.puuid) continue;
     const ids = await getRecentClashMatchIds(summ.puuid);
     for (const id of ids) {
