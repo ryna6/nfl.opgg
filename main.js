@@ -48,11 +48,33 @@ async function load() {
       (sum, p) => sum + (p.wins||0) + (p.losses||0),
       0
     );
-    // Pick the “median” player’s tier/rank as the “Avg Rank”
-    const numericAvg = merged.reduce((sum,_,idx) => sum + (idx+1), 0) / merged.length;
-    const avgIndex   = Math.min(merged.length-1, Math.max(0, Math.round(numericAvg)-1));
-    const avgPlayer  = merged[avgIndex] || {};
-    const avgRankStr = `${avgPlayer.tier||'UNRANKED'} ${avgPlayer.rank||''}`.trim();
+    // Compute true LP-weighted average rank
+    const divisionMap = { IV: 1, III: 2, II: 3, I: 4 };
+    const reverseDivision = { 1: 'IV', 2: 'III', 3: 'II', 4: 'I' };
+    // Turn each player into a single numeric score
+    const numericScores = merged.map(p => {
+      const tierIdx = TIERS.indexOf(p.tier);
+      if (tierIdx < 0 || !divisionMap[p.rank]) return 0;
+      const divNum = divisionMap[p.rank];
+      return tierIdx * 4 + divNum + (p.lp || 0) / 100;
+    });
+    // Compute the average
+    const avgScore =
+      numericScores.reduce((sum, v) => sum + v, 0) / numericScores.length;
+    // Build back into tier/division/LP strings
+    let avgRankStr;
+    if (avgScore < 1) {
+      avgRankStr = 'UNRANKED';
+    } else {
+      const tierIdx = Math.floor((avgScore - 1) / 4);
+      const rem      = avgScore - tierIdx * 4;
+      const divFloor = Math.min(Math.max(Math.floor(rem), 1), 4);
+      const lpFrac   = rem - divFloor;
+      const avgLp    = Math.min(Math.round(lpFrac * 100), 99);
+      const tierName = TIERS[tierIdx] || 'UNRANKED';
+      const division = reverseDivision[divFloor] || '';
+      avgRankStr = `${tierName} ${division} ${avgLp} LP`.trim();
+    }
 
     const secsPerGame = 29*60 + 21;
     const totalSecs   = totalGames * secsPerGame;
