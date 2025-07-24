@@ -96,7 +96,9 @@ try {
     </div>
     `;
 
-    // for clash tab
+    // test for clash section
+    console.log('▶️ Calling loadOverallClash with', merged.length, 'players');
+    // for clash section
     await loadOverallClash(merged);
     
   } catch (err) {
@@ -160,6 +162,10 @@ async function getMatchDetail(id) {
 }
 
 // ─── Build & render the “Overall Clash” tab ────────────────────────────────
+
+// test
+console.log('loadOverallClash: start');
+
 async function loadOverallClash(mergedPlayers) {
   const uniqueIds = new Set();
 
@@ -174,12 +180,18 @@ async function loadOverallClash(mergedPlayers) {
       if (uniqueIds.size >= clashPageSize * 5) break;
     }
   }
-
+  
+  // test
+  console.log('loadOverallClash: uniqueIds count =', uniqueIds.size, Array.from(uniqueIds));
+  
   // Fetch details & keep only true Clash (tourney) games
   const details = (await Promise.all(
     Array.from(uniqueIds).map(id => getMatchDetail(id))
   )).filter(d => d && d.info?.tournamentCode);
 
+  // test
+  console.log('loadOverallClash: fetched detail count =', details.length, details);
+  
   // Sort newest→oldest, reset page index, store
   clashMatchDetails = details.sort(
     (a, b) => b.info.gameStartTimestamp - a.info.gameStartTimestamp
