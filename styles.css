@@ -123,6 +123,22 @@ h1 { text-align:center; margin-bottom:2rem; letter-spacing:.05em; }
   color: #66CDAA;           /* medium aquamarine */
 }
 
+/* mobile player card */
+@media (min-width: 1024px) {
+  .cards {
+    /* lock each column to ~300px and center the grid in its container */
+    grid-template-columns: repeat(3, minmax(0, 300px));
+    justify-content: center;
+  }
+}
+/* mobile fizzy loading image */
+@media (max-width: 600px) {
+  .cards .loading img.loading-img {
+    width: 80%;
+    max-width: none;
+  }
+}
+/* mobile stats card */
 @media (max-width: 600px) {
   .stats {
     display: grid;
