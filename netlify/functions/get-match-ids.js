@@ -1,6 +1,7 @@
 // netlify/functions/get-match-ids.js
 const fetch    = global.fetch;
 const RIOT_KEY = process.env.RIOT_API_KEY;
+console.log('RIOT_KEY is:', RIOT_KEY);
 
 exports.handler = async (event) => {
   const { puuid, count = 15 } = event.queryStringParameters || {};
