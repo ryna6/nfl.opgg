@@ -148,7 +148,7 @@ const RIOT_KEY      = process.env.RIOT_API_KEY;
 async function getSummonerByName(name, region = 'na1') {
   const res = await fetch(
     `https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(name)}`,
-    { headers: { 'X-Riot-Token': API_KEY } }
+    { headers: { 'X-Riot-Token': RIOT_KEY } }
   );
   return res.ok ? res.json() : null;
 }
@@ -159,14 +159,14 @@ async function getRecentClashMatchIds(puuid, region = 'americas', max = 15) {
   );
   url.searchParams.set('type', 'tourney');
   url.searchParams.set('count', max);
-  const res = await fetch(url, { headers: { 'X-Riot-Token': API_KEY } });
+  const res = await fetch(url, { headers: { 'X-Riot-Token': RIOT_KEY } });
   return res.ok ? res.json() : [];
 }
 
 async function getMatchDetail(id, region = 'americas') {
   const res = await fetch(
     `https://${region}.api.riotgames.com/lol/match/v5/matches/${id}`,
-    { headers: { 'X-Riot-Token': API_KEY } }
+    { headers: { 'X-Riot-Token': RIOT_KEY } }
   );
   return res.ok ? res.json() : null;
 }
