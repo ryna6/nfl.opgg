@@ -147,7 +147,9 @@ const clashPageSize   = 10;
 
 // ─── Riot API helper functions ─────────────────────────────────────────────
 async function getSummonerByName(name) {
-  const res = await fetch(`/.netlify/functions/get-summoner?name=${encodeURIComponent(name)}&region=na1`);
+  const res = await fetch(
+    `/.netlify/functions/get-summoner?name=${encodeURIComponent(name)}&region=na1`
+  );
   return res.ok ? res.json() : null;
 }
 async function getRecentClashMatchIds(puuid, _, max = 15) {
